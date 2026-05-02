@@ -39,3 +39,11 @@ export function parseLogLine(line: string): ParsedLog {
     message,
   };
 }
+
+export function createFingerprint(message: string): string {
+  return message
+    .replace(/\b[a-f0-9]{8}-([a-f0-9]{4}-){3}[a-f0-9]{12}\b/gi, "{id}")
+    .replace(/\d+/g, "{number}")
+    .replace(/[a-f0-9-]{8,}/gi, "{id}")
+    .trim();
+}
