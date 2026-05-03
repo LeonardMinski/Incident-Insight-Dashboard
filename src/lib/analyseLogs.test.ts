@@ -19,3 +19,22 @@ test("groups similar errors and counts correctly", () => {
   expect(top.count).toBe(2);
   expect(top.level).toBe("ERROR");
 });
+
+test("handles empty input safely", () => {
+  const result = analyseLogs("");
+
+  expect(result.totalLines).toBe(0);
+  expect(result.groups.length).toBe(0);
+  expect(result.summary.topIssue).toBeUndefined();
+});
+
+test("groups similar messages using fingerprint", () => {
+  const logs = `
+  ERROR service: timeout after 5s
+  ERROR service: timeout after 10s
+  `;
+
+  const result = analyseLogs(logs);
+
+  expect(result.groups[0].count).toBe(2);
+});
