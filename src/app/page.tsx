@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AnalysisResult } from "@/types/logs";
+import { AnalysisResult, LogLevel } from "@/types/logs";
 
 const sampleLogs = `[2026-05-01 10:32:00] ERROR payment-service: Stripe timeout after 10s
 [2026-05-01 10:32:05] ERROR payment-service: Stripe timeout after 5s
@@ -17,10 +17,13 @@ const severityBadgeStyles: Record<string, string> = {
 };
 
 export default function Home() {
+  const [severityFilter, setSeverityFilter] = useState<LogLevel | "ALL">("ALL");
   const [input, setInput] = useState(sampleLogs);
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [loading, setLoading] = useState(false);
-  const nonEmptyLineCount = input.split("\n").filter(Boolean).length;
+  const nonEmptyLineCount = input
+    .split("\n")
+    .filter((line) => line.trim().length > 0).length;
   const analysisStatus = loading
     ? "Analysing logs."
     : result
@@ -51,6 +54,20 @@ export default function Home() {
     }
   };
 
+  const severityOptions: Array<LogLevel | "ALL"> = [
+    "ALL",
+    "ERROR",
+    "WARN",
+    "INFO",
+    "DEBUG",
+    "UNKNOWN",
+  ];
+
+  const visibleGroups =
+    result && severityFilter !== "ALL"
+      ? result.groups.filter((group) => group.level === severityFilter)
+      : (result?.groups ?? []);
+
   return (
     <main
       aria-busy={loading}
@@ -75,7 +92,10 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-2 font-mono text-xs text-zinc-400">
-            <span aria-hidden="true" className="h-2 w-2 rounded-full bg-emerald-400" />
+            <span
+              aria-hidden="true"
+              className="h-2 w-2 rounded-full bg-emerald-400"
+            />
             <span>local parser</span>
           </div>
         </header>
@@ -93,7 +113,10 @@ export default function Home() {
               >
                 Raw logs
               </label>
-              <span aria-live="polite" className="font-mono text-xs text-zinc-400">
+              <span
+                aria-live="polite"
+                className="font-mono text-xs text-zinc-400"
+              >
                 {nonEmptyLineCount} lines
               </span>
             </div>
@@ -146,7 +169,10 @@ export default function Home() {
             </p>
           </section>
 
-          <section aria-labelledby="analysis-results-heading" className="space-y-5">
+          <section
+            aria-labelledby="analysis-results-heading"
+            className="space-y-5"
+          >
             <h2 className="sr-only" id="analysis-results-heading">
               Analysis results
             </h2>
@@ -234,11 +260,28 @@ export default function Home() {
                     >
                       Grouped issues
                     </h3>
-                    <span aria-live="polite" className="font-mono text-xs text-zinc-400">
+                    <span
+                      aria-live="polite"
+                      className="font-mono text-xs text-zinc-400"
+                    >
                       {result.groups.length} groups
                     </span>
                   </div>
-
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {severityOptions.map((level) => (
+                      <button
+                        key={level}
+                        onClick={() => setSeverityFilter(level)}
+                        className={`rounded border px-3 py-1 text-xs ${
+                          severityFilter === level
+                            ? "border-white bg-white text-black"
+                            : "border-slate-700 text-slate-300"
+                        }`}
+                      >
+                        {level}
+                      </button>
+                    ))}
+                  </div>
                   <div className="overflow-x-auto">
                     <table className="w-full border-collapse text-left text-sm">
                       <caption className="sr-only">
@@ -259,7 +302,10 @@ export default function Home() {
                           >
                             Service
                           </th>
-                          <th className="min-w-80 px-4 py-3 font-medium" scope="col">
+                          <th
+                            className="min-w-80 px-4 py-3 font-medium"
+                            scope="col"
+                          >
                             Message
                           </th>
                           <th
@@ -271,7 +317,7 @@ export default function Home() {
                         </tr>
                       </thead>
                       <tbody>
-                        {result.groups.map((group) => (
+                        {visibleGroups.map((group) => (
                           <tr
                             key={group.fingerprint}
                             className="border-b border-zinc-800/80 text-zinc-300 last:border-0 hover:bg-zinc-800/40"
@@ -301,6 +347,17 @@ export default function Home() {
                             </td>
                           </tr>
                         ))}
+
+                        {visibleGroups.length === 0 && (
+                          <tr>
+                            <td
+                              colSpan={4}
+                              className="px-4 py-6 text-center text-sm text-slate-400"
+                            >
+                              No grouped issues match this filter.
+                            </td>
+                          </tr>
+                        )}
                       </tbody>
                     </table>
                   </div>
@@ -309,7 +366,7 @@ export default function Home() {
             ) : (
               <div
                 aria-live="polite"
-                className="flex min-h-[32rem] items-center justify-center rounded-md border border-dashed border-zinc-800 bg-zinc-900/40 px-6 text-center"
+                className="flex min-h-128 items-center justify-center rounded-md border border-dashed border-zinc-800 bg-zinc-900/40 px-6 text-center"
                 role="status"
               >
                 <div>
