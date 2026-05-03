@@ -128,7 +128,7 @@ export default function Home() {
 
             <textarea
               aria-describedby="raw-logs-help"
-              className="h-[32rem] w-full resize-none bg-zinc-950/60 p-4 font-mono text-sm leading-6 text-zinc-200 outline-none placeholder:text-zinc-500 focus-visible:ring-2 focus-visible:ring-emerald-400"
+              className="h-128 w-full resize-none bg-zinc-950/60 p-4 font-mono text-sm leading-6 text-zinc-200 outline-none placeholder:text-zinc-500 focus-visible:ring-2 focus-visible:ring-emerald-400"
               id="raw-logs-input"
               onChange={(e) => setInput(e.target.value)}
               placeholder="[timestamp] LEVEL service: message"
@@ -139,7 +139,7 @@ export default function Home() {
             <div className="flex items-center justify-between gap-3 border-t border-zinc-800 px-4 py-3">
               <button
                 aria-describedby="analysis-status"
-                className="rounded-md bg-emerald-400 px-4 py-2 text-sm font-semibold text-zinc-950 transition hover:bg-emerald-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400 disabled:cursor-not-allowed disabled:bg-zinc-800 disabled:text-zinc-400"
+                className="rounded-md bg-emerald-400 px-4 py-2 text-sm font-semibold text-zinc-950 transition hover:bg-emerald-300 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-emerald-400 disabled:cursor-not-allowed disabled:bg-zinc-800 disabled:text-zinc-400"
                 disabled={loading || !input.trim()}
                 onClick={handleAnalyse}
                 type="button"
@@ -148,7 +148,7 @@ export default function Home() {
               </button>
 
               <button
-                className="rounded-md border border-zinc-700 px-4 py-2 text-sm font-medium text-zinc-300 transition hover:border-zinc-500 hover:text-zinc-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400"
+                className="rounded-md border border-zinc-700 px-4 py-2 text-sm font-medium text-zinc-300 transition hover:border-zinc-500 hover:text-zinc-50 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-emerald-400"
                 onClick={() => {
                   setInput("");
                   setResult(null);

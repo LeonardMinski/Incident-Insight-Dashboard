@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Incident Insight Dashboard
 
-## Getting Started
+## Live
 
-First, run the development server:
+https://ai-support-assistant-omega.vercel.app/
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## What this is
+
+This is a small tool that takes raw application logs and turns them into something actually useful.
+
+Instead of reading through hundreds of lines manually, it groups repeated issues, shows severity breakdown, and highlights what’s going wrong and where.
+
+## What it does
+
+* Parses raw logs into structured data
+* Normalises messages so similar errors are grouped together
+* Counts severity levels (ERROR, WARN, etc)
+* Identifies the most common issue
+* Shows which service is most affected
+* Lets you filter issues by severity
+
+## How it works (simple version)
+
+Raw logs go through a pipeline:
+
+```
+split → parse → normalise → group → sort → summarise
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The key part is fingerprinting.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Example:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+Stripe timeout after 5s
+Stripe timeout after 10s
+```
 
-## Learn More
+Both become:
 
-To learn more about Next.js, take a look at the following resources:
+```
+stripe timeout after {number}s
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+So they get grouped as the same issue.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Tech
 
-## Deploy on Vercel
+* Next.js (App Router)
+* TypeScript
+* Tailwind
+* Jest (for testing the analysis logic)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Running locally
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm install
+npm run dev
+```
+
+Open:
+
+```
+http://localhost:3000
+```
+
+Run tests:
+
+```bash
+npm test
+```
+
+## What I focused on
+
+This project is mainly about data handling, not just UI.
+
+I wanted to:
+
+* take messy input and structure it properly
+* group similar problems reliably
+* surface useful information quickly
+* keep the UI simple and functional
+
+## What I learned
+
+* Breaking problems down into transformation steps
+* Grouping and counting patterns in real data
+* Writing logic that’s testable, not just “works in the UI”
+* Building something end-to-end instead of just frontend screens
+
+## Notes
+
+This is not connected to a real logging system or database. It’s designed to demonstrate the logic behind analysing logs rather than integrating with external services.
