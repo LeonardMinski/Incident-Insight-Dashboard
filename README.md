@@ -1,5 +1,9 @@
 # Incident Insight Dashboard
 
+Raw logs are noisy and hard to read. This tool surfaces repeated issues and highlights what actually matters.
+
+Grouping is done using fingerprint normalisation to collapse similar log messages with dynamic values into a single issue.
+
 ## Live
 
 https://ai-support-assistant-omega.vercel.app/
@@ -91,3 +95,6 @@ I wanted to:
 ## Notes
 
 This is not connected to a real logging system or database. It’s designed to demonstrate the logic behind analysing logs rather than integrating with external services.
+## Preview
+
+![Dashboard Screenshot](public/screenshot.png)

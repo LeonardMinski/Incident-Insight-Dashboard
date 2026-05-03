@@ -91,12 +91,18 @@ export default function Home() {
             </h1>
           </div>
 
-          <div className="flex items-center gap-2 font-mono text-xs text-zinc-400">
-            <span
-              aria-hidden="true"
-              className="h-2 w-2 rounded-full bg-emerald-400"
-            />
-            <span>local parser</span>
+          <div className="flex items-center gap-3 font-mono text-xs text-zinc-400">
+            <div className="flex items-center gap-2">
+              <span
+                aria-hidden="true"
+                className="h-2 w-2 rounded-full bg-emerald-400"
+              />
+              <span>local parser</span>
+            </div>
+
+            <span className="rounded border border-zinc-700 bg-zinc-800 px-2 py-0.5 text-[10px] uppercase tracking-wide text-zinc-300">
+              demo mode
+            </span>
           </div>
         </header>
 
